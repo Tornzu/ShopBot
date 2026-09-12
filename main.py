@@ -1,16 +1,41 @@
-# This is a sample Python script.
+import discord
+from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+load_dotenv()
+token = os.getenv('TOKEN')
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    else:
+        await bot.process_commands(message)
+        await message.channel.send(message.content)
+
+@bot.command()
+async def button(ctx):
+
+    view = discord.ui.View()
+
+    async def button_callback(interaction: discord.Interaction):
+        await interaction.response.send_message("You clicked the button")
+
+    button = discord.ui.Button(
+        label="Click me",
+        style=discord.ButtonStyle.blurple,
+    )
+
+    button.callback = button_callback
+    view.add_item(button)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    await ctx.send("Click the button", view=view)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+bot.run(token)
