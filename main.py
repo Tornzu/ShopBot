@@ -4,9 +4,10 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
-from cart import cart
-from Product import Product
-from views.ShopView import ShopView
+
+from models.cart import cart
+from models.product import Product
+from views.shop_view import ShopView
 
 load_dotenv()
 token = os.getenv('TOKEN')

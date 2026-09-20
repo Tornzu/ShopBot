@@ -1,6 +1,6 @@
 import discord
 
-from views.ProductView import ProductView
+from views.product_view import ProductView
 
 
 class ShopView(discord.ui.View):

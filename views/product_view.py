@@ -1,7 +1,7 @@
 import discord
 
-from Product import Product
-from cart import cart
+from models.product import Product
+from models.cart import cart
 
 class ProductView(discord.ui.View):
     def __init__(self, product: Product):
