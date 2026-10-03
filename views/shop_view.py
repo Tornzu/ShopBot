@@ -16,6 +16,7 @@ class ShopView(discord.ui.View):
 
     def create_callback(self, product):
         async def callback(interaction: discord.Interaction):
-            await interaction.response.send_message(f"{product.name}: ${product.price},{product.description}", view=ProductView(product))
+            await interaction.message.delete()
+            await interaction.response.send_message(f"Product:{product.name}\nPrice:${product.price}\nDescription:{product.description}", view=ProductView(product))
 
         return callback
