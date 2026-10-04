@@ -1,30 +1,22 @@
-import discord
-from models.cart import cart
-from views.cart_item_remove_view import RemoveProductView
+"""import discord
 
 class ViewCart(discord.ui.View):
-    def __init__(self):
+    def __init__(self, navigator):
         super().__init__()
+        self.navigator = navigator
+        for product in self.navigator.products:
         button = discord.ui.Button(
-            label="View cart",
-            style=discord.ButtonStyle.green
-        )
-        button.callback = self.create_callback()
-        self.add_item(button)
+        label="❌ {product.name}"
+
+        #@discord.ui.button(
+    label="clear cart",
+    style=discord.ButtonStyle.red,
+    )
+
+        #@discord.ui.button(
+    label="back to catalog",
+    style=discord.ButtonStyle.red,
+    )
 
 
-    def create_callback(self):
-        async def callback(interaction: discord.Interaction):
-            message = ""
-            total = 0
-            if len(cart) == 0:
-                message += "Empty"
-            else:
-                for product in cart:
-                    message += f"{product.name}: ${product.price}\n"
-                    total = total + product.price
-            await interaction.response.edit_message(view=None)
-            await interaction.followup.send(f"Cart:\n{message}\nTotal: ${total}\n", view=RemoveProductView())
-
-        return callback
-
+"""
