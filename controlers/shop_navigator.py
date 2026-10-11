@@ -2,6 +2,7 @@ import discord
 
 from models.cart import Cart
 from models.product import Product
+from views.cart_view import CartView
 from views.catalog_view import CatalogView
 from views.product_details_view import ProductDetailsView
 
@@ -20,11 +21,27 @@ class ShopNavigator:
     async def open_product_details(self, interaction: discord.Interaction, product: Product):
         await interaction.response.edit_message(
             content=(
-                f"Product:{product.name}\n",
-                f"Price:{product.price}\n",
-                f"Description:{product.description}",
+                f"Product: {product.name}\n"
+                f"Price: {product.price}\n"
+                f"Description: {product.description}"
             ),
             view=ProductDetailsView(self, product)
         )
 
-    #async def open_cart(self, interaction: discord.Interaction)
+    async def open_cart(self, interaction: discord.Interaction):
+        if not self.cart.products:
+            content = "Your cart is empty"
+        else:
+            products_text = "\n".join(
+                [f"{product.name}-{product.price}"  for product in self.cart.products]
+            )
+            content = (
+                f"Your cart: \n \n" 
+                f"{products_text}\n \n"
+                f"Total price: {self.cart.total_price()}"
+            )
+
+        await interaction.response.edit_message(
+            content=content,
+            view=CartView(self)
+        )

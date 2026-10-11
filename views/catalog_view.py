@@ -18,3 +18,15 @@ class CatalogView(discord.ui.View):
         async def callback(interaction: discord.Interaction):
             await self.navigator.open_product_details(interaction, product)
         return callback
+
+    @discord.ui.button(
+        label="View cart",
+        style=discord.ButtonStyle.blurple,
+        row=1
+    )
+    async def show_cart(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button,
+    ):
+        await self.navigator.open_cart(interaction)

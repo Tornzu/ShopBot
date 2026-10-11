@@ -12,7 +12,8 @@ class ProductDetailsView(discord.ui.View):
 
     @discord.ui.button(
         label = "Add to cart",
-        style = discord.ButtonStyle.green
+        style = discord.ButtonStyle.green,
+        row=0,
     )
     async def add_to_cart(
             self,
@@ -26,7 +27,8 @@ class ProductDetailsView(discord.ui.View):
         )
     @discord.ui.button(
         label = "Back to catalog",
-        style = discord.ButtonStyle.red
+        style = discord.ButtonStyle.red,
+        row=1,
     )
     async def back_to_catalog(
             self,
@@ -34,3 +36,15 @@ class ProductDetailsView(discord.ui.View):
             button: discord.ui.Button,
     ):
         await self.navigator.open_catalog(interaction)
+
+    @discord.ui.button(
+        label = "View cart",
+        style = discord.ButtonStyle.blurple,
+        row=0,
+    )
+    async def cart(
+            self,
+            interaction: discord.Interaction,
+            button: discord.ui.Button,
+    ):
+        await  self.navigator.open_cart(interaction)
