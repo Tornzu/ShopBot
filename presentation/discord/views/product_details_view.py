@@ -1,7 +1,6 @@
 import discord
 
-from models.cart import Cart
-from models.product import Product
+from domain.product import Product
 
 
 class ProductDetailsView(discord.ui.View):
@@ -20,10 +19,15 @@ class ProductDetailsView(discord.ui.View):
             interaction: discord.Interaction,
             button: discord.ui.Button,
     ):
-        self.navigator.cart.add_product(self.product)
-        await interaction.response.edit_message(
-            content = f"Product {self.product.name} added to cart.",
-            view=self
+        self.navigator.cart_service.add_product(
+            user_id=interaction.user.id,
+            product_id=self.product.id
+        )
+
+        self.navigator.open_product(
+            interaction,
+            self.product.id,
+            message="Successfully added to cart",
         )
     @discord.ui.button(
         label = "Back to catalog",
