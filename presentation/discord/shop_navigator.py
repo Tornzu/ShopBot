@@ -43,7 +43,7 @@ class ShopNavigator:
 
         content=(
             f"Product: {product.name}\n"
-            f"Price: {product.price}\n"
+            f"Price: ${product.price}\n"
             f"Description: {product.description}"
         )
         if message:
@@ -64,13 +64,13 @@ class ShopNavigator:
             item_text = "\n".join(
                 f"{item.product.name} - "
                 f"${item.product.price} x {item.quantity}"
-                f"= {item.total_price()}"
+                f"= ${item.total_price()}"
                 for item in cart.items
             )
             content = (
                 f"Your cart: \n \n" 
                 f"{item_text}\n \n"
-                f"Total price: {cart.total_price()}"
+                f"Total price: ${cart.total_price()}"
             )
 
         await interaction.response.edit_message(

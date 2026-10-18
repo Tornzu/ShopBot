@@ -7,14 +7,10 @@ class Cart:
         self.items = []
 
     def find_item(self, product_id):
-        return (
-            next(
-                item
-                for item in self.items
-                if item.id == product_id
-            ),
-            None
-        )
+        for item in self.items:
+            if item.product.id == product_id:
+                return item
+        return None
 
     def add_product(self, product):
         item = self.find_item(product.id)

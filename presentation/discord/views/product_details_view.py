@@ -24,7 +24,7 @@ class ProductDetailsView(discord.ui.View):
             product_id=self.product.id
         )
 
-        self.navigator.open_product(
+        await self.navigator.open_product_details(
             interaction,
             self.product.id,
             message="Successfully added to cart",
