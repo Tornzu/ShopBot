@@ -1,6 +1,9 @@
 import discord
+from discord.ui import item
 
 from domain.cart import Cart
+from domain.product import Product
+from presentation.discord.components.product_select import ProductSelect
 
 
 class CartView(discord.ui.View):
@@ -10,42 +13,25 @@ class CartView(discord.ui.View):
 
         if not cart.items:
             self.remove_item(self.clear_cart)
+        else:
+            def cart_product_description(product: Product):
+                item=cart.find_item(product.id)
+                return(
+                    f"{item.quantity} x "
+                    f"${product.price} = "
+                    f"${item.total_price()}"
+                )
 
-        for index, item in enumerate(cart.items):
-            decrease_button = discord.ui.Button(
-                label=f"- {item.product.name}",
-                style=discord.ButtonStyle.red,
-                row=index
+            self.add_item(
+                ProductSelect(
+                    navigator=navigator,
+                    products=[
+                        item.product
+                        for item in cart.items
+                    ],
+                    description=cart_product_description,
+                )
             )
-            increase_button = discord.ui.Button(
-                label=f"+ {item.product.name}",
-                style=discord.ButtonStyle.green,
-                row=index
-            )
-
-            decrease_button.callback = self.create_decrease_product_callback(item.product.id)
-            self.add_item(decrease_button)
-
-            increase_button.callback = self.create_increase_product_callback(item.product.id)
-            self.add_item(increase_button)
-
-    def create_decrease_product_callback(self, product_id: int):
-        async def callback(interaction: discord.Interaction):
-            self.navigator.cart_service.decrease_quantity(
-                user_id=interaction.user.id,
-                product_id=product_id
-            )
-            await self.navigator.open_cart(interaction)
-        return callback
-
-    def create_increase_product_callback(self, product_id: int):
-        async def callback(interaction: discord.Interaction):
-            self.navigator.cart_service.add_product(
-                user_id=interaction.user.id,
-                product_id=product_id
-            )
-            await self.navigator.open_cart(interaction)
-        return callback
 
     @discord.ui.button(
         label="Clear cart",
@@ -57,7 +43,7 @@ class CartView(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button,
     ):
-        self.navigator.cart_service.clear_cart()
+        self.navigator.cart_service.clear_cart(interaction.user.id)
         await self.navigator.open_cart(interaction)
 
     @discord.ui.button(

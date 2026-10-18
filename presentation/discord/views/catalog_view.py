@@ -1,25 +1,22 @@
 import discord
 
 from domain.product import Product
+from presentation.discord.components.product_select import ProductSelect
 
 
 class CatalogView(discord.ui.View):
     def __init__(self, navigator, products: list[Product]):
         super().__init__()
         self.navigator = navigator
-
-        for product in products:
-            button = discord.ui.Button(
-                label=product.name,
-                style=discord.ButtonStyle.green
+        self.add_item(
+            ProductSelect(
+                navigator=navigator,
+                products=products,
+                description=lambda product: (
+                    f"{product.description} - ${product.price}"
+                ),
             )
-            button.callback = self.create_product_callback(product.id)
-            self.add_item(button)
-
-    def create_product_callback(self, product_id: int):
-        async def callback(interaction: discord.Interaction):
-            await self.navigator.open_product_details(interaction, product_id)
-        return callback
+        )
 
     @discord.ui.button(
         label="View cart",

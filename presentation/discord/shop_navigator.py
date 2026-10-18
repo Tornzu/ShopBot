@@ -23,7 +23,6 @@ class ShopNavigator:
         products = self.product_service.get_all_products()
 
         await interaction.response.edit_message(
-            content="Choose a product: ",
             view=CatalogView(navigator=self, products=products)
         )
 
@@ -41,6 +40,11 @@ class ShopNavigator:
             )
             return
 
+        cart = self.cart_service.get_cart(user_id=interaction.user.id)
+        cart_item = cart.find_item(product.id)
+        quantity = cart_item.quantity if cart_item else 0
+
+
         content=(
             f"Product: {product.name}\n"
             f"Price: ${product.price}\n"
@@ -51,7 +55,7 @@ class ShopNavigator:
 
         await interaction.response.edit_message(
             content=content,
-            view=ProductDetailsView(navigator=self, product=product)
+            view=ProductDetailsView(navigator=self, product=product, quantity=quantity)
         )
 
     async def open_cart(self, interaction: discord.Interaction):
