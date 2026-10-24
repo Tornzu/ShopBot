@@ -1,10 +1,11 @@
+from dataclasses import dataclass, field
+from typing import List
 from domain.cart_item import CartItem
 
-
+@dataclass
 class Cart:
-    def __init__(self, user_id):
-        self.user_id = user_id
-        self.items = []
+    user_id: int
+    items: List[CartItem] = field(default_factory=list)
 
     def find_item(self, product_id):
         for item in self.items:
