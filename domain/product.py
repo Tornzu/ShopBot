@@ -1,6 +1,10 @@
+from dataclasses import dataclass
+from decimal import Decimal
+
+
+@dataclass(frozen=True)
 class Product:
-    def __init__(self, id, name, price, description):
-        self.id = id
-        self.name = name
-        self.price = price
-        self.description = description
+    id: int
+    name: str
+    price: Decimal
+    description: str

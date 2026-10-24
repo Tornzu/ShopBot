@@ -1,18 +1,13 @@
 import discord
 from discord.ext import commands
-import os
-from dotenv import load_dotenv
-
 from application.cart_service import CartService
 from application.product_service import ProductService
+from config.settings import DISCORD_TOKEN
 from domain.product import Product
 from infrastructure.repositories.in_memory_cart_repository import InMemoryCartRepository
 from infrastructure.repositories.in_memory_product_repository import InMemoryProductRepository
 from presentation.discord.shop_navigator import ShopNavigator
 from presentation.discord.views.catalog_view import CatalogView
-
-load_dotenv()
-token = os.getenv('TOKEN')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -53,4 +48,4 @@ async def clear(ctx):
     async for message in ctx.channel.history():
         await message.delete()
 
-bot.run(token)
+bot.run(DISCORD_TOKEN)
