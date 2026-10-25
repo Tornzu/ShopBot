@@ -1,7 +1,11 @@
+from dataclasses import dataclass
+
+from domain.product import Product
+
+@dataclass
 class CartItem:
-    def __init__(self, product, quantity=1):
-        self.product = product
-        self.quantity = quantity
-        
+    product: Product
+    quantity: int
+
     def total_price(self):
         return self.quantity * self.product.price

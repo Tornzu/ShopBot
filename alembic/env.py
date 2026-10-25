@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 from infrastructure.database.base import Base
-from infrastructure.database.models.product_model import ProductModel
+import infrastructure.database.models
 from infrastructure.database.connection import DATABASE_URL
 
 # this is the Alembic Config object, which provides
