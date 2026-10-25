@@ -43,7 +43,7 @@ class CartView(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button,
     ):
-        self.navigator.cart_service.clear_cart(interaction.user.id)
+        await self.navigator.cart_service.clear_cart(interaction.user.id)
         await self.navigator.open_cart(interaction)
 
     @discord.ui.button(

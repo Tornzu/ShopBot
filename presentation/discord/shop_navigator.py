@@ -20,7 +20,7 @@ class ShopNavigator:
         self.cart_service = cart_service
 
     async def open_catalog(self, interaction: discord.Interaction):
-        products = self.product_service.get_all_products()
+        products = await self.product_service.get_all_products()
 
         await interaction.response.edit_message(
             view=CatalogView(navigator=self, products=products)
@@ -32,7 +32,7 @@ class ShopNavigator:
         product_id: int,
         message: str | None = None
     ):
-        product = self.product_service.get_product(product_id)
+        product = await self.product_service.get_product(product_id)
         if product is None:
             await interaction.response.edit_message(
                 content="Product not found",
@@ -40,7 +40,7 @@ class ShopNavigator:
             )
             return
 
-        cart = self.cart_service.get_cart(user_id=interaction.user.id)
+        cart = await self.cart_service.get_cart(user_id=interaction.user.id)
         cart_item = cart.find_item(product.id)
         quantity = cart_item.quantity if cart_item else 0
 
@@ -60,7 +60,7 @@ class ShopNavigator:
 
     async def open_cart(self, interaction: discord.Interaction):
         user_id = interaction.user.id
-        cart = self.cart_service.get_cart(user_id)
+        cart = await self.cart_service.get_cart(user_id)
 
         if not cart.items:
             content = "Your cart is empty"

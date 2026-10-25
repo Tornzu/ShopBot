@@ -24,7 +24,7 @@ class ProductDetailsView(discord.ui.View):
             interaction: discord.Interaction,
             button: discord.ui.Button,
     ):
-        self.navigator.cart_service.add_product(
+        await self.navigator.cart_service.add_product(
             user_id=interaction.user.id,
             product_id=self.product.id
         )
@@ -45,7 +45,7 @@ class ProductDetailsView(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button,
     ):
-        self.navigator.cart_service.decrease_quantity(
+        await self.navigator.cart_service.decrease_quantity(
             user_id=interaction.user.id,
             product_id=self.product.id
         )
@@ -61,7 +61,7 @@ class ProductDetailsView(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button,
     ):
-        self.navigator.cart_service.add_product(
+        await self.navigator.cart_service.add_product(
             user_id=interaction.user.id,
             product_id=self.product.id
         )

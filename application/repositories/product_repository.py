@@ -6,9 +6,9 @@ from domain.product import Product
 
 class ProductRepository(ABC):
     @abstractmethod
-    def get_all(self) -> List[Product]:
+    async def get_all(self) -> List[Product]:
         pass
 
     @abstractmethod
-    def get_by_id(self, product_id: int) -> Optional[Product]:
+    async def get_by_id(self, product_id: int) -> Product | None:
         pass

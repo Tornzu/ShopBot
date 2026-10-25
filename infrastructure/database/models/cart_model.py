@@ -1,7 +1,5 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from domain import cart
 from infrastructure.database.base import Base
 
 

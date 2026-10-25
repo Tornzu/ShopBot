@@ -26,7 +26,7 @@ class CartItemModel(Base):
         nullable=False,
     )
 
-    cart: Mapped["CartModel"] = relationship(back_populates="cart")
+    cart: Mapped["CartModel"] = relationship(back_populates="items")
 
     product: Mapped["ProductModel"] = relationship()
 

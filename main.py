@@ -1,13 +1,18 @@
+import asyncio
+import sys
 import discord
 from discord.ext import commands
 from application.cart_service import CartService
 from application.product_service import ProductService
 from config.settings import DISCORD_TOKEN
 from domain.product import Product
-from infrastructure.repositories.in_memory_cart_repository import InMemoryCartRepository
-from infrastructure.repositories.in_memory_product_repository import InMemoryProductRepository
+from infrastructure.database.connection import session_factory
+from infrastructure.repositories.sqlalchemy_product_repository import SqlAlchemyProductRepository
 from presentation.discord.shop_navigator import ShopNavigator
 from presentation.discord.views.catalog_view import CatalogView
+
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -20,9 +25,9 @@ products = [
     Product(id=3, name="Cheese", price=2, description="dairy free cheese"),
 ]
 
-product_repository = InMemoryProductRepository(products)
+product_repository = SqlAlchemyProductRepository(session_factory)
 
-cart_repository = InMemoryCartRepository()
+cart_repository = SqlAlchemyProductRepository(session_factory)
 
 product_service = ProductService(product_repository)
 
@@ -41,7 +46,7 @@ async def start(ctx):
 @bot.command()
 async def shop(ctx):
     message = "Choose a product:"
-    await ctx.send(message, view=CatalogView(navigator, products=product_service.get_all_products()))
+    await ctx.send(message, view=CatalogView(navigator, products= await product_service.get_all_products()))
 
 @bot.command()
 async def clear(ctx):
