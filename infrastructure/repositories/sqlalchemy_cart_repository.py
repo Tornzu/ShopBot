@@ -13,7 +13,7 @@ class SqlAlchemyCartRepository(CartRepository):
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]):
         self.session_factory = session_factory
 
-    async def get_by_user_id(self, user_id: int) -> Cart:
+    async def get_by_user_id(self, user_id: int) -> Cart | None:
         async with self.session_factory() as session:
             result = await session.execute(
                 select(CartModel)
@@ -30,8 +30,44 @@ class SqlAlchemyCartRepository(CartRepository):
             return None
         return self._to_domain(model, user_id)
 
-    async def save(self, cart: Cart) -> None:
-        pass
+    async def create(self, cart: Cart) -> None:
+        async with self.session_factory() as session:
+            result = await session.execute(
+                select(UserModel)
+                .where(UserModel.discord_user_id == cart.user_id)
+            )
+
+            user_model = result.scalars().one_or_none()
+            if user_model is None:
+                raise ValueError(f"User {cart.user_id} does not exist")
+            cart_model = CartModel(
+                user_id = user_model.id
+            )
+            session.add(cart_model)
+            await session.commit()
+
+    async def update(self, cart: Cart) -> None:
+        async with self.session_factory() as session:
+            result = await session.execute(
+                select(CartModel)
+                .join(CartModel.user)
+                .where(UserModel.discord_user_id == cart.user_id)
+                .options(
+                    selectinload(CartModel.items)
+                )
+            )
+            cart_model = result.scalars().one_or_none()
+            if cart_model is None:
+                raise ValueError(f"Cart for user {cart.user_id} not found")
+            cart_model.items.clear()
+            for item in cart.items:
+                cart_model.items.append(
+                    CartItemModel(
+                        product_id = item.product.id,
+                        quantity = item.quantity
+                    )
+                )
+            await session.commit()
 
     @staticmethod
     def _to_domain(model: CartModel, user_id: int) -> Cart:

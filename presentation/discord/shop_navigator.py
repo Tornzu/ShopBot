@@ -40,7 +40,7 @@ class ShopNavigator:
             )
             return
 
-        cart = await self.cart_service.get_cart(user_id=interaction.user.id)
+        cart = await self.cart_service.get_or_create_cart(user_id=interaction.user.id)
         cart_item = cart.find_item(product.id)
         quantity = cart_item.quantity if cart_item else 0
 
@@ -60,7 +60,7 @@ class ShopNavigator:
 
     async def open_cart(self, interaction: discord.Interaction):
         user_id = interaction.user.id
-        cart = await self.cart_service.get_cart(user_id)
+        cart = await self.cart_service.get_or_create_cart(user_id)
 
         if not cart.items:
             content = "Your cart is empty"

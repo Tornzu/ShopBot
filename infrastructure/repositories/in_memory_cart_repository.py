@@ -12,5 +12,5 @@ class InMemoryCartRepository(CartRepository):
 
         return self.carts[user_id]
 
-    def save(self, cart: Cart) -> None:
+    def create(self, cart: Cart) -> None:
         self.carts[cart.user_id] = cart

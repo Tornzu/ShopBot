@@ -7,6 +7,7 @@ from application.product_service import ProductService
 from config.settings import DISCORD_TOKEN
 from domain.product import Product
 from infrastructure.database.connection import session_factory
+from infrastructure.repositories.sqlalchemy_cart_repository import SqlAlchemyCartRepository
 from infrastructure.repositories.sqlalchemy_product_repository import SqlAlchemyProductRepository
 from presentation.discord.shop_navigator import ShopNavigator
 from presentation.discord.views.catalog_view import CatalogView
@@ -27,7 +28,7 @@ products = [
 
 product_repository = SqlAlchemyProductRepository(session_factory)
 
-cart_repository = SqlAlchemyProductRepository(session_factory)
+cart_repository = SqlAlchemyCartRepository(session_factory)
 
 product_service = ProductService(product_repository)
 
