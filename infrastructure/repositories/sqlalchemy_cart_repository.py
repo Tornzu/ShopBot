@@ -83,7 +83,7 @@ class SqlAlchemyCartRepository(CartRepository):
             cart.items.append(
                 CartItem(
                     product=product,
-                    quantity=product_model.quantity,
+                    quantity=item_model.quantity,
                 )
             )
         return cart

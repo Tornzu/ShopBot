@@ -1,7 +1,5 @@
-from discord import User
-
 from application.repositories.user_repository import UserRepository
-from infrastructure.database.base import Base
+from domain.user import User
 
 
 class UserService:
