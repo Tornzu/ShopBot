@@ -60,6 +60,8 @@ class SqlAlchemyCartRepository(CartRepository):
             if cart_model is None:
                 raise ValueError(f"Cart for user {cart.user_id} not found")
             cart_model.items.clear()
+            await session.flush()
+
             for item in cart.items:
                 cart_model.items.append(
                     CartItemModel(
